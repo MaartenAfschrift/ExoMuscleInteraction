@@ -32,8 +32,8 @@ Examples\Optimimze_AFO\SimulateExo_Gait92Model.osim
 
 Results Figure
 
-![](Examples\Optimize_AFO\SimResults.jpg)
+![FigureCaption](https://github.com/MaartenAfschrift/ExoMuscleInteraction/tree/master/Examples/Optimize_AFO/SimResults.jpg)
 
 Figure 1: Influence of achilles tendon stiffness on optimal assistance, simulated muscle activity, muscle fiber length, muscle power and exoskeleton performance
-  
+
 
