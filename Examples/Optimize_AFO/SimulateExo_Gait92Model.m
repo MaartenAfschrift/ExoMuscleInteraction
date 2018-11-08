@@ -66,7 +66,7 @@ S.tension  = [];%[0.62 1    0.75 1.5 0.75 0.50 0.69 0.62 0.75]; % the 18m model
 S.b_Metab  = 10;
 
 % Loop over tendon stiffness vectors
-StiffnessVect = [8 10 15 20 30 100 200 400 900];    % simulate for different values of tendo stiffness  
+StiffnessVect = [6 8 10 12 15 17 20 25 30 35 40 70 100 200];    % simulate for different values of tendo stiffness  
 nSim=length(StiffnessVect);
 
 % setup NLP
@@ -80,9 +80,9 @@ for i=1:nSim
         S.CreateAdigatorFiles = 0;  % create new adigator files for the continuous and endpoint function ?
         S.RunMuscleAnalysis = 0;
     end
-%     S.ATendon(20:21) = StiffnessVect(i);
     setup.auxdata.ATendon(MuscleInds_S)=StiffnessVect(i);
-    [res,Texo,TID,MusclePower,lMtilde,MActivation,lTtilde,energy_total] = nExo_Sim_Batch_Run(setup,DatStore);
+    [res,Texo,TID,MusclePower,lMtilde,MActivation,lTtilde,energy_total,~,...
+        ~,~,ExoPosWork,ExoNetWork] = nExo_Sim_Batch_Run(setup,DatStore);
     if i==1
         % pre allocate variables
         nColl=length(res.time);
@@ -93,7 +93,8 @@ for i=1:nSim
         MActivation_Vect=zeros(nColl,NMuscles,nSim);
         lTtilde_Vect=zeros(nColl,NMuscles,nSim);
         E_Vect=zeros(nColl,NMuscles,nSim);        
-        
+        Work_Vect   = zeros(S.N_exo_dof,nSim);
+        PosWork_Vect   = zeros(S.N_exo_dof,nSim);
     end    
     Texo_Vect(:,:,i)=Texo;
     TID_Vect(:,:,i)=TID;
@@ -101,7 +102,9 @@ for i=1:nSim
     lMtilde_Vect(:,:,i)=lMtilde;
     MActivation_Vect(:,:,i)=MActivation;
     lTtilde_Vect(:,:,i)=lTtilde;
-    E_Vect(:,:,i)=energy_total;    
+    E_Vect(:,:,i)=energy_total;   
+    PosWork_Vect(:,i)=ExoPosWork;
+    Work_Vect(:,i)=ExoNetWork;
 end
 
 %% Run simulations without with AFO
@@ -115,8 +118,8 @@ for i=1:nSim
     end
     
     setupNoExo.auxdata.ATendon(MuscleInds_S)=StiffnessVect(i);
-    [res,Texo,TID,MusclePower,lMtilde,MActivation,lTtilde,energy_total] = nExo_Sim_Batch_Run(setupNoExo,DatStore);
-    
+    [res,Texo,TID,MusclePower,lMtilde,MActivation,lTtilde,energy_total,~,...
+        ~,~,ExoPosWork,ExoNetWork] = nExo_Sim_Batch_Run(setupNoExo,DatStore);    
     if i==1
         Texo_Vect2=zeros(nColl,S.N_exo_dof,nSim);
         TID_Vect2=zeros(nColl,S.nDof,nSim);
@@ -125,6 +128,8 @@ for i=1:nSim
         MActivation_Vect2=zeros(nColl,NMuscles,nSim);
         lTtilde_Vect2=zeros(nColl,NMuscles,nSim);
         E_Vect2=zeros(nColl,NMuscles,nSim);
+        Work_Vect2   = zeros(S.N_exo_dof,nSim);
+        PosWork_Vect2   = zeros(S.N_exo_dof,nSim);
     end
     
 
@@ -135,10 +140,14 @@ for i=1:nSim
     MActivation_Vect2(:,:,i)=MActivation;
     lTtilde_Vect2(:,:,i)=lTtilde;
     E_Vect2(:,:,i)=energy_total;
-    
+    PosWork_Vect2(:,i)=ExoPosWork;
+    Work_Vect2(:,i)=ExoNetWork;
 end
 
 %% Data export
 
-save(fullfile(S.OutPath,'Energy_TendonSim.mat'),'S','Misc','auxdata','Texo_Vect','TID_Vect','MusclePower_Vect','lMtilde_Vect','MActivation_Vect','lTtilde_Vect','E_Vect',...
-    'Texo_Vect2','TID_Vect2','MusclePower_Vect2','lMtilde_Vect2','MActivation_Vect2','lTtilde_Vect2','res','DatStore','setup','setupNoExo','E_Vect2','StiffnessVect');
+save(fullfile(S.OutPath,'Energy_TendonSim.mat'),'S','Misc','auxdata','Texo_Vect','TID_Vect','MusclePower_Vect',...
+    'lMtilde_Vect','MActivation_Vect','lTtilde_Vect','E_Vect',...
+    'Texo_Vect2','TID_Vect2','MusclePower_Vect2','lMtilde_Vect2','MActivation_Vect2',...
+    'lTtilde_Vect2','res','DatStore','setup','setupNoExo','E_Vect2','StiffnessVect',...
+    'PosWork_Vect2','PosWork_Vect','Work_Vect2','Work_Vect','StiffnessVect');

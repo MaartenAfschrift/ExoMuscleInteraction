@@ -22,17 +22,18 @@ Several software packages are needed to run the program
 
  ### Optimize AFO
 
-In this example, the actuation profile of an ankle foot exoskeleton is optimized to minimize metabolic energy consumption during walking. Actuation constratins are implemented based on Zhang2017 for comparision with the optimal profile determined using human-in-the-loop optimization (Zhang2017: http://dx.doi.org/10.1126/science.aal5054). The influence of achilles tendon stiffnes is evaluated to document the importance of muscle-tendon interaction during walking.
+In this example, the actuation profile of an ankle foot exoskeleton is optimized to minimize metabolic energy consumption during walking. Actuation constraints are implemented based on Zhang2017 for comparision with the optimal profile determined using human-in-the-loop optimization (Zhang2017: http://dx.doi.org/10.1126/science.aal5054). The influence of achilles tendon stiffnes on energy consumption and optimal eoskeletion actuations is evaluated to document the importance of muscle-tendon interaction during walking.
 
 OpenSim gait2392 model is used to simulate muscle and skeleton dynamics. Joint kinematics and kinetics are computed based on normal walking on the treadmill without exoskeleton. Note that in inverse approach with invariant kinematics is used (i.e. joint kinematics and kinetics are invariant/ not optimized). In addition, muscle activations and exoskeleton assistance is optimized for one leg accounting for the ankle, knee and hip degrees of freedom.
 
 Script to run example:
 
+Examples\Optimimze_AFO\SimulateExo_Gait92Model.osim
 
+Results Figure
 
-Script to plot results example:
+![](Examples\Optimize_AFO\SimResults.jpg)
 
-
-
-Results:
+Figure 1: Influence of achilles tendon stiffness on optimal assistance, simulated muscle activity, muscle fiber length, muscle power and exoskeleton performance
+  
 

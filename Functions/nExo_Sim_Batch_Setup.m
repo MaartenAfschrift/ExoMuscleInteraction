@@ -15,6 +15,8 @@ auxdata.Topt_res= S.Topt_res;
 auxdata.ID_rel = 0;
 if isfield(S,'ID_rel')
    auxdata.ID_rel=S.ID_rel;
+else
+    auxdata.ID_rel=zeros(size(S.Texo));
 end
 
 % path information
